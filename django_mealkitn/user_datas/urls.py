@@ -1,9 +1,7 @@
 from django.urls import path
-from . import views
-from django.views.generic import TemplateView
+from user_datas.views import registerSuervey
 
 app_name = 'user_datas'
 urlpatterns = [
-    path('survey/', views.registerSuervey, name='survey'),
-    # path('', views.home, name='index'),
+    path('survey/', registerSuervey, name='survey'),
 ]

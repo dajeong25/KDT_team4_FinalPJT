@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+app_name = 'mk_recs'
 urlpatterns = [
-    path('mk_recs/', views.mk_recs, name='mk_recs'),
+    path('index/', views.home, name='index'),
+    path('mealkit/', views.mk_recs_result, name='mk_recs_result'),
 ]

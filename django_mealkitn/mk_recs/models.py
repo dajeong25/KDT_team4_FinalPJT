@@ -1,6 +1,6 @@
 from django.db import models
 
-
+# Create your models here.
 class CoupangMealkit(models.Model):
     category_name = models.CharField(max_length=300, blank=True, null=True)
     category_second = models.CharField(max_length=300, blank=True, null=True)
@@ -24,3 +24,21 @@ class CoupangMealkit(models.Model):
 
     def __str__(self):
         return self.product
+
+    class Meta:
+        db_table = 'CoupangMealkit'
+        verbose_name = '쿠팡 밀키트 정보'  # 관리자페이지에 모델관리할 때 출력되는 모델이름
+        verbose_name_plural = '쿠팡 밀키트 정보'  # 기본적으로 영어기준 복수로 모델명이 표시됨
+
+
+# 쿠팡 세부카테고리 리스트 등록
+class coupang_category(models.Model):
+    category_keys = models.CharField(max_length=15)
+
+    def __str__(self):
+        return self.category_keys
+
+    class Meta:
+        db_table = 'coupang_category'
+        verbose_name = '쿠팡 세부 카테고리'  # 관리자페이지에 모델관리할 때 출력되는 모델이름
+        verbose_name_plural = '쿠팡 세부 카테고리'  # 기본적으로 영어기준 복수로 모델명이 표시됨

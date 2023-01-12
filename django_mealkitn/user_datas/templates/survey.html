@@ -56,21 +56,25 @@
 	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 	})(window,document,'script','dataLayer','GTM-NKDMSK6');</script>
+	<script type="'text/javascript">
+<!--		$(document).ready(function(){-->
+<!--			$('.대분류').change(function(){-->
+<!--				var sel = $(this).val();-->
+<!--				if(sel == )-->
+<!--			});-->
+<!--		});-->
+	</script>
 	<!-- End Google Tag Manager -->
 	</head>
 
 	<body>
-	<!-- Google Tag Manager (noscript) -->
-	<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKDMSK6"
-	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-	<!-- End Google Tag Manager (noscript) -->
 	<div class="image-container set-full-height" style="background-image: url('static/img/밀키트-연출컷01-1.png')">
 
 		<!--   Creative Tim Branding   -->
-	    <a href="{% url 'index' %}">
+	    <a href="{% url 'mk_recs:index' %}">
 			<div >class="logo">
 				<div class="logo">
-	                <img src="assets/img/AB.png" style="width:150px; height:70px; margin-left:100px; margin-top:50px;">
+	                <img src="{% static 'img/AB.png' %}" style="width:150px; height:70px; margin-left:100px; margin-top:50px;">
 				</div>
 			<div class="brand">밀키트엔</div>
 	    </a>
@@ -79,299 +83,283 @@
 	    <div class="container">
 	        <div class="row">
 		        <div class="col-sm-8 col-sm-offset-2">
-
 		            <!--      Wizard container        -->
 		            <div class="wizard-container">
 		                <div class="card wizard-card" data-color="red" id="wizard">
 		                <form action="." method='POST'>
 							{% csrf_token %}
-		                <!--        You can switch " data-color="green" "  with one of the next bright colors: "blue", "azure", "orange", "red"       -->
-		                    	<div class="wizard-header">
-		                        	<h3 class="wizard-title">List your preference</h3>
-		                        	<p class="category">당신에게 딱 맞는 추천을 위한 절차입니다</p>
-		                    	</div>
-								<div class="wizard-navigation">
-									<div class="progress-with-circle">
-									    <div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4" style="width: 15%;"></div>
+		                <!-- You can switch data-color="green" with one of the next bright colors: "blue", "azure", "orange", "red"       -->
+							<div class="wizard-header">
+								<h3 class="wizard-title">List your preference</h3>
+								<p class="category">당신에게 딱 맞는 추천을 위한 절차입니다</p>
+							</div>
+							<div class="wizard-navigation">
+								<div class="progress-with-circle">
+									<div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4" style="width: 15%;"></div>
+								</div>
+								<ul>
+									<li>
+										<a href="#survey" data-toggle="tab">
+											<div class="icon-circle">
+												<i class="fa-solid fa-id-card"></i>
+											</div>
+											Survey
+										</a>
+									</li>
+									<li>
+										<a href="#allergy" data-toggle="tab">
+											<div class="icon-circle">
+												<i class="fa-solid fa-viruses"></i>
+											</div>
+											Allergy
+										</a>
+									</li>
+									<li>
+										<a href="#category" data-toggle="tab">
+											<div class="icon-circle">
+												<i class="fa-solid fa-tags"></i>
+											</div>
+											Category
+										</a>
+									</li>
+								</ul>
+							</div>
+
+							<div class="tab-content">
+								<div class="tab-pane" id="survey">
+									<div class="row">
+										<div class="col-sm-12">
+											<h5 class="info-text">
+												맞춤 추천을 위한 설문조사
+												<br> <p>(선택사항)</p>
+											</h5>
+										</div>
+										<div class="col-sm-5 col-sm-offset-1">
+											<div class="form-group">
+												<label>이름(별명)</label><br>
+												{{ form.user_name }}
+											</div>
+										</div>
+										<div class="col-sm-5">
+											<div class="form-group">
+												<label>성별</label><br>
+												{{ form.user_gender }}
+											</div>
+										</div>
 									</div>
-									<ul>
-			                            <li>
-											<a href="#survey" data-toggle="tab">
-												<div class="icon-circle">
-													<i class="fa-solid fa-id-card"></i>
-												</div>
-												Survey
-											</a>
-										</li>
-			                            <li>
-											<a href="#allergy" data-toggle="tab">
-												<div class="icon-circle">
-													<i class="fa-solid fa-viruses"></i>
-												</div>
-												Allergy
-											</a>
-										</li>
-			                            <li>
-											<a href="#category" data-toggle="tab">
-												<div class="icon-circle">
-													<i class="fa-solid fa-tags"></i>
-												</div>
-												Category
-											</a>
-										</li>
-			                        </ul>
+									<div class="row">
+										<div class="col-sm-5 col-sm-offset-1">
+											<div class="form-group">
+												<label>연령대</label><br>
+												{{ form.user_age }}
+											</div>
+										</div>
+										<div class="col-sm-5">
+											<div class="form-group">
+												<label>이메일</label><br>
+												{{ form.user_email }}
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-5 col-sm-offset-1">
+											<div class="form-group">
+												<label>선호도 조사</label><br>
+												<span>
+													경험 했던 밀키트 중에서 만족한(선호하는) 밀키트는 무엇인가요?<br>
+													(카테고리를 선택해주세요)
+												</span><br><br>
+												{% for ct in category %}
+												<p><input type="checkbox" name="pos_category[]" id="pos" value="{{ ct }}"> {{ ct }}</p>
+												{% endfor %}
+											</div>
+										</div>
+										<div class="col-sm-5">
+											<div class="form-group">
+												<label>비선호도 조사</label><br>
+												<span>
+													경험 했던 밀키트 중에서 불만족(비선호)하는 밀키트는 무엇인가요?<br>
+													(카테고리를 선택해주세요)
+												</span><br><br>
+												{% for ct in category %}
+												<p><input type="checkbox" name="neg_category[]" id="neg" value="{{ ct }}"> {{ ct }}</p>
+												{% endfor %}
+											</div>
+										</div>
+									</div>
 								</div>
 
-		                        <div class="tab-content">
-		                            <div class="tab-pane" id="survey">
-		                            	<div class="row">
-		                                	<div class="col-sm-12">
-		                                    	<h5 class="info-text">
-													맞춤 추천을 위한 설문조사
-													<br> <p>(선택사항)</p>
-												</h5>
-		                            		</div>
-		                                	<div class="col-sm-5 col-sm-offset-1">
-		                                    	<div class="form-group">
-		                                        	<label>이름(별명)</label><br>
-													{{ form.user_name }}
-		                                    	</div>
-		                                	</div>
-											<div class="col-sm-5">
-		                                    	<div class="form-group">
-		                                            <label>성별</label><br>
-													{{ form.user_gender }}
-		                                        </div>
-		                                	</div>
-										</div>
-										<div class="row">
-		                                	<div class="col-sm-5 col-sm-offset-1">
-		                                    	<div class="form-group">
-		                                        	<label>연령대</label><br>
-													{{ form.user_age }}
-		                                    	</div>
-		                                	</div>
-		                                	<div class="col-sm-5">
-		                                    	<div class="form-group">
-		                                        	<label>이메일</label><br>
-													{{ form.user_email }}
-		                                    	</div>
-		                                	</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-5 col-sm-offset-1">
-		                                    	<div class="form-group">
-		                                        	<label>선호도 조사</label><br>
-													<span>
-														경험 했던 밀키트 중에서 만족한(선호하는) 밀키트는 무엇인가요?<br>
-														(카테고리를 선택해주세요)
-													</span>
-													{{ form.pos_category }}
-		                                        	<select class="form-control">
-			                                            <option disabled="" selected="">- persons -</option>
-			                                            <option>1 Person</option>
-			                                            <option>2 Persons </option>
-		                                        	</select>
-		                                    	</div>
-		                                	</div>
-		                                	<div class="col-sm-5">
-		                                    	<div class="form-group">
-		                                            <label>비선호도 조사</label><br>
-													<span>
-														경험 했던 밀키트 중에서 불만족(비선호)하는 밀키트는 무엇인가요?<br>
-														(카테고리를 선택해주세요)
-													</span>
-													{{ form.neg_category }}
-		                                            <select name="country" class="form-control">
-		                                                <option disabled="" selected="">- country -</option>
-		                                                <option value="Afghanistan"> Afghanistan </option>
-		                                                <option value="Albania"> Albania </option>
-		                                            </select>
-		                                        </div>
-		                                	</div>
-		                            	</div>
-		                            </div>
-
-		                            <div class="tab-pane" id="allergy">
-		                                <h5 class="info-text">어떠한 알레르기가 있으신가요?</h5>
-										<p><cencer>(중복선택가능)</cencer></p>
-		                                <div class="row">
-		                                    <div class="col-sm-12">
-		                                        <div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-		                                                <input type="checkbox" name="jobb" value="Design">
-		                                                <div class="card card-checkboxes card-hover-effect">
-		                                                    <i class="fa-solid fa-shrimp fa-2x"></i>
-															<p>갑각류</p>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-		                                        <div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-		                                                <input type="checkbox" name="jobb" value="Design">
-		                                                <div class="card card-checkboxes card-hover-effect">
-		                                                    <i class="fa-solid fa-tablets fa-2x"></i>
-															<p>견과류</p>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-												<div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-		                                                <input type="checkbox" name="jobb" value="Design">
-		                                                <div class="card card-checkboxes card-hover-effect">
-		                                                    <i class="fa-solid fa-egg fa-2x"></i>
-															<p>달걀</p>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-												<div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-		                                                <input type="checkbox" name="jobb" value="Design">
-		                                                <div class="card card-checkboxes card-hover-effect">
-		                                                    <i class="fa-solid fa-wheat-awn fa-2x"></i>
-															<p>메밀</p>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-											</div>
-										</div>
-										<div class="row">
-		                                    <div class="col-sm-12">
-		                                        <div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-		                                                <input type="checkbox" name="jobb" value="Design">
-		                                                <div class="card card-checkboxes card-hover-effect">
-		                                                    <i class="fa-solid fa-jar-wheat fa-2x"></i>
-															<p>밀가루</p>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-		                                        <div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-		                                                <input type="checkbox" name="jobb" value="Design">
-		                                                <div class="card card-checkboxes card-hover-effect">
-		                                                    <i class="fa-solid fa-glass-water fa-2x"></i>
-															<p>우유</p>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-												<div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-		                                                <input type="checkbox" name="jobb" value="Design">
-		                                                <div class="card card-checkboxes card-hover-effect">
-		                                                    <i class="fa-brands fa-octopus-deploy fa-2x"></i>
-															<p>연체동물류</p>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-												<div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-		                                                <input type="checkbox" name="jobb" value="Design">
-		                                                <div class="card card-checkboxes card-hover-effect">
-		                                                    <i class="fa-solid fa-circle-dot fa-2x"></i>
-															<p>콩</p>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-											</div>
-										</div>
-										<div class="row">
-		                                    <div class="col-sm-12">
-		                                        <div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-		                                                <input type="checkbox" name="jobb" value="Design">
-		                                                <div class="card card-checkboxes card-hover-effect">
-		                                                    <i class="fa-solid fa-kiwi-bird fa-2x"></i>
-															<p>닭</p>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-		                                        <div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-		                                                <input type="checkbox" name="jobb" value="Design">
-		                                                <div class="card card-checkboxes card-hover-effect">
-		                                                    <i class="fa-solid fa-piggy-bank fa-2x"></i>
-															<p>돼지</p>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-												<div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-		                                                <input type="checkbox" name="jobb" value="Design">
-		                                                <div class="card card-checkboxes card-hover-effect">
-		                                                    <i class="fa-solid fa-p fa-2x"></i>
-															<p>복숭아</p>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-												<div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-		                                                <input type="checkbox" name="jobb" value="Design">
-		                                                <div class="card card-checkboxes card-hover-effect">
-		                                                    <i class="fa-solid fa-cow fa-2x"></i>
-															<p>소</p>
-		                                                </div>
-		                                            </div>
-		                                        </div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-12">
-												<div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-														<input type="checkbox" name="jobb" value="Design">
-														<div class="card card-checkboxes card-hover-effect">
-															<i class="fa-solid fa-t fa-2x"></i>
-															<p>토마토</p>
-														</div>
+								<div class="tab-pane" id="allergy">
+									<h5 class="info-text">어떠한 알레르기가 있으신가요?
+									<p>(중복선택가능)</p></h5>
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="갑각류">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-shrimp fa-2x"></i>
+														<p>갑각류</p>
 													</div>
 												</div>
-												<div class="col-sm-3">
-													<div class="choice" data-toggle="wizard-checkbox">
-														<input type="checkbox" name="jobb" value="Design">
-														<div class="card card-checkboxes card-hover-effect">
-															<i class="fa-solid fa-fish fa-2x"></i>
-															<p>생선류</p>
-														</div>
+											</div>
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="견과류">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-tablets fa-2x"></i>
+														<p>견과류</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="달걀">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-egg fa-2x"></i>
+														<p>달걀</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="메밀">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-wheat-awn fa-2x"></i>
+														<p>메밀</p>
 													</div>
 												</div>
 											</div>
 										</div>
-		                            </div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="밀가루">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-jar-wheat fa-2x"></i>
+														<p>밀가루</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="우유">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-glass-water fa-2x"></i>
+														<p>우유</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="연체동물류">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-brands fa-octopus-deploy fa-2x"></i>
+														<p>연체동물류</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="콩">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-circle-dot fa-2x"></i>
+														<p>콩</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="닭">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-kiwi-bird fa-2x"></i>
+														<p>닭</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="돼지">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-piggy-bank fa-2x"></i>
+														<p>돼지</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="복숭아">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-p fa-2x"></i>
+														<p>복숭아</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="소">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-cow fa-2x"></i>
+														<p>소</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="토마토">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-t fa-2x"></i>
+														<p>토마토</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-3">
+												<div class="choice" data-toggle="wizard-checkbox">
+													<input type="checkbox" name="jobb" value="생선류">
+													<div class="card card-checkboxes card-hover-effect">
+														<i class="fa-solid fa-fish fa-2x"></i>
+														<p>생선류</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 
-		                            <div class="tab-pane" id="category">
-		                                <h5 class="info-text">원하는 밀키트의 카테고리를 선택해주세요</h5>
-		                                <div class="row">
-		                                    <div class="col-sm-5 col-sm-offset-1">
-		                                    	<div class="form-group">
-		                                        	<label>대분류</label><br>
-													{{ form.category }}
-		                                        	<select class="form-control">
-			                                            <option disabled="" selected="">- type -</option>
-			                                            <option>Business</option>
-			                                            <option>Vacation </option>
-			                                            <option>Work</option>
-		                                        	</select>
-		                                    	</div>
-		                                    </div>
-		                                    <div class="col-sm-5">
-		                                    	<div class="form-group">
-		                                        	<label>소분류</label><br>
-													{{ form.category }}
-		                                        	<select class="form-control">
-			                                            <option disabled="" selected="">- response -</option>
-			                                            <option>Yes</option>
-			                                            <option>No </option>
-		                                        	</select>
-		                                    	</div>
-		                                    </div>
-		                                </div>
-		                            </div>
+								<div class="tab-pane" id="category">
+									<h5 class="info-text">원하는 밀키트의 카테고리를 선택해주세요</h5>
+									<div class="row">
+										<div class="col-sm-5 col-sm-offset-1">
+											<div class="form-group">
+												<label>대분류</label><br>
+												{{ form.category_fst }}
+											</div>
+										</div>
+										<div class="col-sm-5">
+											<div class="form-group">
+												<label>소분류</label><br>
+												{% for ct in category %}
+												<p><input type="checkbox" name="category_sec" id="category_second" value="{{ ct }}"> {{ ct }}</p>
+												{% endfor %}
+											</div>
+										</div>
+									</div>
+								</div>
 
 		                        <div class="wizard-footer">
 	                            	<div class="pull-right">
 	                                    <input type='button' class='btn btn-next btn-fill btn-danger btn-wd' name='next' value='Next' />
-	                                    <input type='button' class='btn btn-finish btn-fill btn-danger btn-wd' name='finish' value='Finish' />
+	                                    <button type='submit' class='btn btn-finish btn-fill btn-danger btn-wd' name='finish' >Finish</button>
 									</div>
 
 	                                <div class="pull-left">
