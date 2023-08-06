@@ -18,14 +18,14 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="{% url 'mk_recs:index' %}">밀키트 추천</a>
+                <a class="navbar-brand" href="{% url 'home' %}">밀키트 추천</a>
             </div>
         </nav>
         <!-- Header-->
         <header class="bg-dark py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">{{ user_name }}을 위한 밀키트 추천</h1>
+                    <h1 class="display-4 fw-bolder">{{ user_name }}님을 위한 밀키트 추천</h1>
                     <p class="lead fw-normal text-white-50 mb-0">마음에 드시는 밀키트를 선택하면, 더욱 다채롭게 먹을 수 있도록 레시피를 추천해드립니다.</p>
                 </div>
             </div>
@@ -35,37 +35,37 @@
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
-                    {% for cf in mealkit_detail_list %}
+                    {% for mdl in mealkit_detail_list %}
                     <div class="col mb-5">
                         <div class="card h-100">
                             <!-- Sale badge-->
-                            {% if cf.price != cf.discounted_price %}
+                            {% if mdl.price != mdl.discounted_price %}
                                 <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
                             {% endif %}
                             <!-- Product image-->
-                            <img class="card-img-top" src={{ cf.image_link }} alt="..." />
+                            <img class="card-img-top" src={{ mdl.image_link }} alt="..." />
                             <!-- Product details-->
                             <div class="card-body p-4">
                                 <div class="text-center">
                                     <!-- Product name-->
-                                    <h5 class="fw-bolder">{{ cf.name }}</h5>
+                                    <h5 class="fw-bolder">{{ mdl.name }}</h5>
                                     <!-- Product reviews-->
-                                    {% if cf.ratings == 1 %}
+                                    {% if mdl.ratings == 1 %}
                                     <div class="d-flex justify-content-center small text-warning mb-2">
                                         <div class="bi-star-fill"></div>
                                     </div>
-                                    {% elif cf.ratings == 2 %}
+                                    {% elif mdl.ratings == 2 %}
                                      <div class="d-flex justify-content-center small text-warning mb-2">
                                          <div class="bi-star-fill"></div>
                                          <div class="bi-star-fill"></div>
                                     </div>
-                                    {% elif cf.ratings == 3 %}
+                                    {% elif mdl.ratings == 3 %}
                                      <div class="d-flex justify-content-center small text-warning mb-2">
                                          <div class="bi-star-fill"></div>
                                          <div class="bi-star-fill"></div>
                                          <div class="bi-star-fill"></div>
                                     </div>
-                                    {% elif cf.ratings == 4 %}
+                                    {% elif mdl.ratings == 4 %}
                                      <div class="d-flex justify-content-center small text-warning mb-2">
                                          <div class="bi-star-fill"></div>
                                          <div class="bi-star-fill"></div>
@@ -82,19 +82,34 @@
                                     </div>
                                     {% endif %}
                                      <!-- Product price-->
-                                    {% if cf.price == cf.discounted_price %}
-                                    {{ cf.price }}
+                                    {% if mdl.yogiyo_price == 0 %}
+                                        {% if mdl.price == mdl.discounted_price %}
+                                        <strong>가격 : {{ mdl.price }}원</strong>
+                                        {% else %}
+                                        <strong>가격 :</strong> <span class="text-muted text-decoration-line-through"><strong>{{ mdl.price }}원</strong></span>
+                                        <strong> {{ mdl.discounted_price }}원</strong>
+                                        {% endif %}
                                     {% else %}
-                                    <span class="text-muted text-decoration-line-through">{{ cf.price }}</span>
-                                    {{ cf.discounted_price }}
+                                        {% if mdl.price == mdl.discounted_price %}
+                                            <strong>가격 : {{ mdl.price }}원</strong>
+                                            <br>
+                                            <br>
+                                            <strong>평균 요기요 가격 : {{ mdl.yogiyo_price }}원</strong>
+                                            {% else %}
+                                            <strong>가격 :</strong> <span class="text-muted text-decoration-line-through"><strong>{{ mdl.price }}원</strong></span>
+                                            <strong> {{ mdl.discounted_price }}원</strong>
+                                            <br>
+                                            <br>
+                                            <strong>평균 요기요 가격 : {{ mdl.yogiyo_price }}원</strong>
+                                            {% endif %}
                                     {% endif %}
                                 </div>
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center"><a class="btn btn-outline-dark mt-auto" href='{% url "mk_recs:recipe" %}'>View recipes</a></div>
-                                    <br>
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href='{{ mealkit_dict.link }}'>View product</a></div>
+                                <br>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href='{{mdl.link}}'>View product</a></div>
                             </div>
                         </div>
                     </div>
@@ -104,7 +119,7 @@
             <br>
             <br>
             <hr>
-            <center><h3>이런 상품은 어떠세요?</h3></center>
+            <h3><center><strong>이런 상품은 어떠세요?</strong></center></h3>
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                     {% for cf in cf_list %}
@@ -154,11 +169,26 @@
                                     </div>
                                     {% endif %}
                                      <!-- Product price-->
-                                    {% if cf.price == cf.discounted_price %}
-                                    {{ cf.price }}
+                                    {% if cf.yogiyo_price == 0 %}
+                                        {% if cf.price == cf.discounted_price %}
+                                            <strong>가격 : {{ cf.price }}원</strong>
+                                        {% else %}
+                                            <strong>가격 :</strong> <span class="text-muted text-decoration-line-through"><strong>{{ cf.price }}원</strong></span>
+                                            <strong> {{ cf.discounted_price }}원</strong>
+                                        {% endif %}
                                     {% else %}
-                                    <span class="text-muted text-decoration-line-through">{{ cf.price }}</span>
-                                    {{ cf.discounted_price }}
+                                        {% if cf.price == cf.discounted_price %}
+                                            <strong>가격 : {{ cf.price }}원</strong>
+                                            <br>
+                                            <br>
+                                            <strong>평균 요기요 가격 : {{ cf.yogiyo_price }}원</strong>
+                                        {% else %}
+                                            <strong>가격 :</strong> <span class="text-muted text-decoration-line-through"><strong>{{ cf.price }}원</strong></span>
+                                            <strong> {{ cf.discounted_price }}원</strong>
+                                            <br>
+                                            <br>
+                                            <strong>평균 요기요 가격 : {{ cf.yogiyo_price }}원</strong>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                             </div>
@@ -166,7 +196,7 @@
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center"><a class="btn btn-outline-dark mt-auto" href='{% url "mk_recs:recipe" %}'>View recipes</a></div>
                                     <br>
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href='{{ mealkit_dict.link }}'>View product</a></div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href='{{cf.link}}'>View product</a></div>
                             </div>
                         </div>
                     </div>

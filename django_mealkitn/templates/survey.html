@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="ko">
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -42,42 +42,37 @@
     <link href="{% static 'css_wizard/bootstrap.min.css' %}" rel="stylesheet" />
 	<link href="{% static 'css_wizard/paper-bootstrap-wizard.css' %}" rel="stylesheet" />
 
-	<!-- CSS Just for demo purpose, don't include it in your project -->
-	<link href="{% static 'css_wizard/demo.css' %}" rel="stylesheet" />
-
 	<!-- Fonts and Icons -->
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css" rel="stylesheet">
 	<link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-	<!-- Google Tag Manager -->
-	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-	})(window,document,'script','dataLayer','GTM-NKDMSK6');</script>
-	<script type="'text/javascript">
-<!--		$(document).ready(function(){-->
-<!--			$('.대분류').change(function(){-->
-<!--				var sel = $(this).val();-->
-<!--				if(sel == )-->
-<!--			});-->
-<!--		});-->
+
+	<!-- 대소분류 -->
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.대분류').change(function(){
+				var sel = $(this).val();
+				if(sel == )
+			});
+		});
 	</script>
-	<!-- End Google Tag Manager -->
-	</head>
 
-	<body>
-	<div class="image-container set-full-height" style="background-image: url('static/img/밀키트-연출컷01-1.png')">
-
+</head>
+<body>
+	<div class="image-container set-full-height">
+	<div class="opacity-box">
 		<!--   Creative Tim Branding   -->
-	    <a href="{% url 'mk_recs:index' %}">
-			<div >class="logo">
-				<div class="logo">
-	                <img src="{% static 'img/AB.png' %}" style="width:150px; height:70px; margin-left:100px; margin-top:50px;">
+	    <div class="logo-container">
+			<a href="{% url 'home' %}">
+				<div class="logo" style="float: left;">
+	                <img src="{% static 'img/AB.png' %}" style="width:70px; height:70px; margin-left:100px; margin-top:50px;" alt="logo">
 				</div>
-			<div class="brand">밀키트엔</div>
-	    </a>
+				<div class="brand">
+	                mealkitN
+	            </div>
+	    	</a>
+		</div>
 
 	    <!--   Big container   -->
 	    <div class="container">
@@ -170,7 +165,10 @@
 													(카테고리를 선택해주세요)
 												</span><br><br>
 												{% for ct in category %}
-												<p><input type="checkbox" name="pos_category[]" id="pos" value="{{ ct }}"> {{ ct }}</p>
+												<p>
+													<input type="checkbox" name="pos_category" id="pos" value="{{ ct }}">
+													{{ ct }}
+												</p>
 												{% endfor %}
 											</div>
 										</div>
@@ -181,8 +179,11 @@
 													경험 했던 밀키트 중에서 불만족(비선호)하는 밀키트는 무엇인가요?<br>
 													(카테고리를 선택해주세요)
 												</span><br><br>
-												{% for ct in category %}
-												<p><input type="checkbox" name="neg_category[]" id="neg" value="{{ ct }}"> {{ ct }}</p>
+												{% for neg in category %}
+												<p>
+													<input type="checkbox" name="neg_category" id="neg" value="{{ neg }}">
+													{{ neg }}
+												</p>
 												{% endfor %}
 											</div>
 										</div>
@@ -196,7 +197,7 @@
 										<div class="col-sm-12">
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="갑각류">
+													<input type="checkbox" name="allergy" value="갑각류">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-shrimp fa-2x"></i>
 														<p>갑각류</p>
@@ -205,7 +206,7 @@
 											</div>
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="견과류">
+													<input type="checkbox" name="allergy" value="견과류">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-tablets fa-2x"></i>
 														<p>견과류</p>
@@ -214,7 +215,7 @@
 											</div>
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="달걀">
+													<input type="checkbox" name="allergy" value="달걀">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-egg fa-2x"></i>
 														<p>달걀</p>
@@ -223,7 +224,7 @@
 											</div>
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="메밀">
+													<input type="checkbox" name="allergy" value="메밀">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-wheat-awn fa-2x"></i>
 														<p>메밀</p>
@@ -236,7 +237,7 @@
 										<div class="col-sm-12">
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="밀가루">
+													<input type="checkbox" name="allergy" value="밀가루">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-jar-wheat fa-2x"></i>
 														<p>밀가루</p>
@@ -245,7 +246,7 @@
 											</div>
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="우유">
+													<input type="checkbox" name="allergy" value="우유">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-glass-water fa-2x"></i>
 														<p>우유</p>
@@ -254,7 +255,7 @@
 											</div>
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="연체동물류">
+													<input type="checkbox" name="allergy" value="연체동물류">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-brands fa-octopus-deploy fa-2x"></i>
 														<p>연체동물류</p>
@@ -263,7 +264,7 @@
 											</div>
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="콩">
+													<input type="checkbox" name="allergy" value="콩">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-circle-dot fa-2x"></i>
 														<p>콩</p>
@@ -276,7 +277,7 @@
 										<div class="col-sm-12">
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="닭">
+													<input type="checkbox" name="allergy" value="닭">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-kiwi-bird fa-2x"></i>
 														<p>닭</p>
@@ -285,7 +286,7 @@
 											</div>
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="돼지">
+													<input type="checkbox" name="allergy" value="돼지">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-piggy-bank fa-2x"></i>
 														<p>돼지</p>
@@ -294,7 +295,7 @@
 											</div>
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="복숭아">
+													<input type="checkbox" name="allergy" value="복숭아">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-p fa-2x"></i>
 														<p>복숭아</p>
@@ -303,7 +304,7 @@
 											</div>
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="소">
+													<input type="checkbox" name="allergy" value="소">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-cow fa-2x"></i>
 														<p>소</p>
@@ -316,7 +317,7 @@
 										<div class="col-sm-12">
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="토마토">
+													<input type="checkbox" name="allergy" value="토마토">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-t fa-2x"></i>
 														<p>토마토</p>
@@ -325,7 +326,7 @@
 											</div>
 											<div class="col-sm-3">
 												<div class="choice" data-toggle="wizard-checkbox">
-													<input type="checkbox" name="jobb" value="생선류">
+													<input type="checkbox" name="allergy" value="생선류">
 													<div class="card card-checkboxes card-hover-effect">
 														<i class="fa-solid fa-fish fa-2x"></i>
 														<p>생선류</p>
@@ -376,12 +377,11 @@
 
 		<div class="footer">
 	        <div class="container text-center">
-	             Made with <i class="fa fa-heart heart"></i> by <a href="https://www.creative-tim.com">Creative Tim</a>. Free download <a href="https://www.creative-tim.com/product/paper-bootstrap-wizard">here.</a>
+				made by mealkitN
 	        </div>
 	    </div>
-
 	</div>
-
+	</div>
 </body>
 
 	<!--   Core JS Files   -->
@@ -390,7 +390,6 @@
 	<script src="{% static 'js_wizard/jquery.bootstrap.wizard.js' %}" type="text/javascript"></script>
 
 	<!--  Plugin for the Wizard -->
-	<script src="{% static 'js_wizard/demo.js' %}" type="text/javascript"></script>
 	<script src="{% static 'js_wizard/paper-bootstrap-wizard.js' %}" type="text/javascript"></script>
 
 	<!--  More information about jquery.validate here: https://jqueryvalidation.org/	 -->

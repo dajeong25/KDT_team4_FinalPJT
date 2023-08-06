@@ -1,12 +1,23 @@
-{% extends 'base.html' %}
-{% block content %}
 {% load static %}
-<body class="homepage is-preload">
-	<div id="page-wrapper">
+<!DOCTYPE HTML>
+<!--
+	Helios by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>mealkitN</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+<!--		<noscript><link rel="stylesheet" href="{% static 'css/noscript.css' %}" /></noscript>-->
+	</head>
 
-		<!-- Header -->
-			<div id="header" >
-
+	<body class="homepage">
+		<div id="page-wrapper">
+			<!-- Header -->
+			<div id="header">
 				<!-- Inner -->
 				<div class="inner">
 					<header>
@@ -16,45 +27,21 @@
 						<p>고민이라면, 밀키트엔에서 추천해 드릴게요!</p>
 					</header>
 					<footer>
-						<a href="{% url 'user_datas:survey' %}" class="button circled scrolly">Start</a>
+						<a href="{% url 'user_datas:survey' %}" class="button circled">Start</a>
 					</footer>
 				</div>
-
 			</div>
+		</div>
+	</body>
 
-		<!-- Footer -->
-			<div id="footer">
-				<div class="container">
-					<div class="row">
+    <!-- Scripts -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+<!--    <script src="{% static 'js/jquery.dropotron.min.js' %}"></script>-->
+<!--    <script src="{% static 'js/jquery.scrolly.min.js' %}"></script>-->
+    <script src="{% static 'js/jquery.scrollex.min.js' %}"></script>
+    <script src="{% static 'js/browser.min.js' %}"></script>
+    <script src="{% static 'js/breakpoints.min.js' %}"></script>
+    <script src="{% static 'js/util.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</html>
 
-						<!-- Contact -->
-						<section class="contact">
-							<header>
-								<h3>Nisl turpis nascetur interdum?</h3>
-							</header>
-							<p>Urna nisl non quis interdum mus ornare ridiculus egestas ridiculus lobortis vivamus tempor aliquet.</p>
-							<ul class="icons">
-								<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-								<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-								<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-								<li><a href="#" class="icon brands fa-pinterest"><span class="label">Pinterest</span></a></li>
-								<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
-								<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">Linkedin</span></a></li>
-							</ul>
-						</section>
-
-						<!-- Copyright -->
-						<div class="copyright">
-							<ul class="menu">
-								<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-							</ul>
-						</div>
-
-					</div>
-
-				</div>
-			</div>
-
-	</div>
-</body>
-{% endblock %}
