@@ -1,3 +1,4 @@
+import random
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -17,7 +18,11 @@ from konlpy.tag import Okt
 from django.shortcuts import render, redirect
 from coupang_crawler import *
 from collaborative_filtering import *
-from . import models
+from mk_recs.models import *
+from user_datas.models import User
+import rcp_crawler
+from gensim.models import Word2Vec
+import ast
 
 
 def run(request, *args):
@@ -46,7 +51,7 @@ def run(request, *args):
             # 상품 리스트 추출 및 전처리
             for cg_soup in cg_soup2:
                 coupang_item = p_list_preprocessing(cg_soup, category_number(categoryId,
-                                                                                                             category))
+                                                                             category))
                 coupang_items = pd.concat([coupang_items, coupang_item], ignore_index=True)
 
     # 중복행 삭제
@@ -99,7 +104,7 @@ def run(request, *args):
             image_link.append('https:' + page[int(link_start[num]):int(link_end[num]) + 1])
 
     # 기존에 존재하는 이미지 제거
-    deleteAllFiles('C:/coding/mealkitn/image/')
+    deleteAllFiles('C:/coding/multicampus/image/')
 
     # 상세페이지에서 전체 이미지 저장
     count = 0
@@ -438,7 +443,10 @@ def run(request, *args):
 
     add_new_items(coupang)
 
+    coupang.to_csv('coupang_filtering.csv')
+
     return render(request, 'index.html')
+
 
 def home(request):
     return render(request, 'index.html')
@@ -447,9 +455,8 @@ def home(request):
 # 밀키트 추천
 def mk_recs_result(request, *args):
     # 네이버 트랜드 불러오기
-    naver_df = pd.read_csv('2023-1-2edited_navertrend.csv', index_col=0)
+    naver_df = pd.read_csv('2023-1-13edited_navertrend.csv', index_col=0)
     naver_df.replace('밀키트', '', regex=True, inplace=True)
-
     naver_df['전체_카테고리'] = naver_df['전체'].apply(lambda x: category_name(x))
     naver_df['밥/죽_카테고리'] = naver_df['밥/죽'].apply(lambda x: category_name(x))
     naver_df['찌개/국_카테고리'] = naver_df['찌개/국'].apply(lambda x: category_name(x))
@@ -458,17 +465,272 @@ def mk_recs_result(request, *args):
     naver_df['볶음/튀김_카테고리'] = naver_df['볶음/튀김'].apply(lambda x: category_name(x))
     naver_df['조림/찜_카테고리'] = naver_df['조림/찜'].apply(lambda x: category_name(x))
     naver_df['간식/디저트_카테고리'] = naver_df['간식/디저트'].apply(lambda x: category_name(x))
+    naver_df.to_csv('2023-1-13edited_navertrend.csv')
 
     # 밀키트 추천
+    coupang_df = pd.read_csv('coupang_filtering.csv')
     # 최근에 추가된 유저 데이터에서 알레르기, 카테고리, 선호, 비선호 가져오기
+    user = User.objects.values_list().order_by('-id')[0]
+    user_name = user[1]
+    user_alleray = user[7]
+    user_category2 = user[9]
 
-    category, product_list = coupang_naver_categories('생선탕')
-    tfidf_commend = tfidf_commend_system(category, product_list)
+    # 알레르기 유발 성분 포함 밀키트 제거
+    user_value = ast.literal_eval(user_alleray)
+    coupang_df['알레르기'] = coupang_df['알레르기'].fillna('-')
+
+    idxlist = []
+    for i in range(len(coupang_df.알레르기.values)):
+        value = coupang_df.알레르기.values[i].split(', ')
+        total_len = len(user_value) + len(value)
+        merge_len = len(set(user_value + value))
+
+        if total_len != merge_len:
+            a = coupang_df.알레르기.index[i]
+            idxlist.append(a)
+
+    for idx in idxlist:
+        coupang_df.drop(index=idx, inplace=True)
+
+    coupang_df.to_csv('coupang_data.csv')  # 알레르기 포함된 밀키트 제거
+    coupang_df_copy = coupang_df.copy()    # 협업필터링 추천을 위한 df 저장
+
+    # 상세카테고리 상품만 필터링
+    coupang_df = coupang_df.loc[coupang_df.상세카테고리 == user_category2]
+    category, product_list = coupang_naver_categories(user_category2, naver_df)
+    tfidf_commend = tfidf_commend_system(category, product_list, coupang_df)
+
+    mealkit_detail_list = []
+    mealkit_id = []
+    for mealkit_X in tfidf_commend:
+        mealkitDB = CoupangMealkit.objects.get(product=mealkit_X)
+
+        mealkitDB_name = mealkitDB.product
+        mealkitDB_discounted_price = mealkitDB.discounted_price
+        mealkitDB_price = mealkitDB.full_price
+        mealkitDB_yogiyo_price = mealkitDB.yogiyo_price
+        mealkitDB_ratings = int(round(mealkitDB.ratings))
+        mealkitDB_edited_ingredient = mealkitDB.edited_ingredient
+        mealkitDB_link = 'https://www.coupang.com/vp/products/' + mealkitDB.product_id
+        mealkit_id.append(mealkitDB.product_id)
+
+        user_agt = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.46"
+        headers = {"User-Agent": user_agt, "Accept-Language": "ko-KR,ko;q=0.8,en-US;q=0.5,en;q=0.3"}
+        res = requests.get(mealkitDB_link, headers=headers)
+        res.raise_for_status()
+        soup = BeautifulSoup(res.text, "lxml")
+        mealkitDB_image_link = "http:" + soup.select_one('#repImageContainer > img')['src']
+
+        mealkit_detail_list.append({'name': mealkitDB_name,
+                                    'discounted_price': mealkitDB_discounted_price,
+                                    'price': mealkitDB_price,
+                                    'yogiyo_price': mealkitDB_yogiyo_price,
+                                    'ratings': mealkitDB_ratings,
+                                    'edited_ingredient': mealkitDB_edited_ingredient,
+                                    'link': mealkitDB_link,
+                                    'image_link': mealkitDB_image_link})
+    # print(mealkit_detail_list)
 
     # 협업필터링
     # name, 상세카테고리, 점수
     # 1. 선호 4, 비선호 2, 기본3 카테고리 점수화
     # 2. 가중치 정렬 카테고리 기반 추천 or 랜덤?
+    cf = User.objects.all().values()
+    cf_df = pd.DataFrame(list(cf))
 
-    return render(request, 'product.html')
+    cf_pos = cf_df[['user_name', 'pos_category']]
+    cf_pos.rename(columns={'pos_category': 'category'}, inplace=True)
+    cf_pos['weighting'] = 4
+
+    cf_neg = cf_df[['user_name', 'neg_category']]
+    cf_neg.rename({'neg_category': 'category'})
+    cf_neg.rename(columns={'neg_category': 'category'}, inplace=True)
+    cf_neg['weighting'] = 2
+
+    cf = pd.concat([cf_pos, cf_neg])
+
+    item = collaborative_df(cf)
+    try:
+        get_category = get_item(item, user_category2)
+        coupang_index = coupang_df[
+            (coupang_df.상세카테고리 == get_category[0]) | (coupang_df.상세카테고리 == get_category[1])].index
+        coupang_id = list(coupang_df.loc[coupang_index, '상품id'])
+        for i in coupang_id:
+            if i in mealkit_id:
+                coupang_id.remove(i)
+    except:
+        categorys = coupang_category.objects.values_list('category_keys', flat=True).order_by(
+            'category_keys').distinct()
+        coupang_id = []
+        while len(coupang_id) < 2:
+            random_choice = random.sample(list(categorys), 2)
+            coupang_index = coupang_df_copy[
+                (coupang_df_copy.상세카테고리 == random_choice[0]) | (coupang_df_copy.상세카테고리 == random_choice[1])].index
+
+            coupang_id = list(coupang_df_copy.loc[coupang_index, '상품id'])
+            for i in coupang_id:
+                if i in mealkit_id:
+                    coupang_id.remove(i)
+
+    if len(coupang_id) >= 4:
+        coupang_id = random.sample(list(coupang_id), 4)
+
+    cf_list = []
+    for key in coupang_id:
+        db = CoupangMealkit.objects.get(product_id=key)
+        db_name = db.product
+        db_discounted_price = db.discounted_price
+        db_price = db.full_price
+        db_ratings = int(round(db.ratings))
+        db_yogiyo_price = db.yogiyo_price
+        db_link = 'https://www.coupang.com/vp/products/' + db.product_id
+
+        user_agt = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.46"
+        headers = {"User-Agent": user_agt, "Accept-Language": "ko-KR,ko;q=0.8,en-US;q=0.5,en;q=0.3"}
+        res = requests.get(db_link, headers=headers)
+        res.raise_for_status()
+        soup = BeautifulSoup(res.text, "lxml")
+        db_image_link = "http:" + soup.select_one('#repImageContainer > img')['src']
+
+        cf_list.append({'name': db_name,
+                        'discounted_price': db_discounted_price,
+                        'price': db_price,
+                        'yogiyo_price': db_yogiyo_price,
+                        'ratings': db_ratings,
+                        'link': db_link,
+                        'image_link': db_image_link})
+
+    context = {'user_name': user_name, 'mealkit_detail_list': mealkit_detail_list, 'cf_list': cf_list}
+    return render(request, 'product.html', context)
+
+
+def rcp_recs_result(request):
+    # 가중치까지 계산한 df을 불러옴
+    ckg = pd.read_csv('ckg_weighted.csv', index_col=0)
+
+    # word2vec 사용을 위한 데이터 포멧 변경
+    ckg['요리재료_전처리'] = ckg['요리재료_전처리'].apply(lambda x: x.split(', '))  # 1차원 list 형태
+
+    # coupang 상세정보
+    naver_df = pd.read_csv('2023-1-13edited_navertrend.csv', index_col=0)
+    coupang_df = pd.read_csv('coupang_data.csv')
+
+    # 최근에 추가된 유저 데이터에서 알레르기, 카테고리, 선호, 비선호 가져오기
+    user = User.objects.values_list().order_by('-id')[0]
+    user_name = user[1]
+    user_pos = user[5]
+    user_neg = user[6]
+    user_allergy = user[7]
+    user_category1 = user[8]
+    user_category2 = user[9]
+
+    # 알레르기 유발 성분 포함 밀키트 제거
+    user_value = ast.literal_eval(user_allergy)
+
+    category, product_list = coupang_naver_categories(user_category2, naver_df)
+    tfidf_commend = tfidf_commend_system(category, product_list, coupang_df)
+
+    mealkit_detail_list = []
+    for mealkit_X in tfidf_commend:
+        mealkitDB = CoupangMealkit.objects.get(product=mealkit_X)
+
+        mealkitDB_name = mealkitDB.product
+        mealkitDB_discounted_price = mealkitDB.discounted_price
+        mealkitDB_price = mealkitDB.full_price
+        mealkitDB_yogiyo_price = mealkitDB.yogiyo_price
+        mealkitDB_ratings = int(round(mealkitDB.ratings))
+        mealkitDB_edited_ingredient = mealkitDB.edited_ingredient
+        mealkitDB_link = 'https://www.coupang.com/vp/products/' + mealkitDB.product_id
+
+        user_agt = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36 Edg/108.0.1462.46"
+        headers = {"User-Agent": user_agt, "Accept-Language": "ko-KR,ko;q=0.8,en-US;q=0.5,en;q=0.3"}
+        res = requests.get(mealkitDB_link, headers=headers)
+        res.raise_for_status()
+        soup = BeautifulSoup(res.text, "lxml")
+        mealkitDB_image_link = "http:" + soup.select_one('#repImageContainer > img')['src']
+
+        mealkit_detail_list.append({'name': mealkitDB_name,
+                                    'discounted_price': mealkitDB_discounted_price,
+                                    'price': mealkitDB_price,
+                                    'yogiyo_price': mealkitDB_yogiyo_price,
+                                    'ratings': mealkitDB_ratings,
+                                    'edited_ingredient': mealkitDB_edited_ingredient,
+                                    'link': mealkitDB_link,
+                                    'image_link': mealkitDB_image_link})
+
+    # coupang에서 input 값의 df 추출
+    coupang_df['상품_전처리'] = coupang_df['상품']
+    man_list = []
+    for i in range(len(mealkit_detail_list)):
+        name = mealkit_detail_list[i].get('name')
+
+        product_df = coupang_df.loc[coupang_df['상품'] == name]
+        num = coupang_df.index[(coupang_df['상품'] == name)].tolist()[0]
+
+        # input 상품명 및 구성정보 전처리 후 list로 추출
+        product_list, ingredients_list = rcp_crawler.get_product_list(num, product_df)
+
+        # input 상품의 만개의 레시피와 일치하는 카테고리만 추출 {dict}
+        ckg_key_value = rcp_crawler.get_product_category(num, coupang_df)
+
+        # input 상품명과 일치하는 레시피만 추출
+        recipe_df = rcp_crawler.get_recipe_df(ckg, product_list, ckg_key_value)
+        #if len(recipe_df) == 0:  # 일치하는 레시피가 아예 없는 경우 에러발생
+        #   raise
+        recipe_index = recipe_df.index.tolist()
+
+        # 일치하는 만개의 레시피 요리재료명 통일
+        word = rcp_crawler.get_recipe_pre(recipe_index, recipe_df)
+
+        # 통일한 요리재료명 업데이트
+        recipe_df['요리재료_전처리'] = word
+
+        # word list의 가장 마지막에 input 구성정보 추가
+        word.append(ingredients_list)
+
+        # word2vec 모델 생성
+        wv_model = Word2Vec(sentences=word, vector_size=100, window=20, min_count=1, sg=1, batch_words=1000, alpha=0.03)
+
+        # 레시피 별 벡터 평균 추출
+        wordvec = [rcp_crawler.vectors(x, wv_model) for x in word]
+
+        # 코사인유사도 계산
+        w2v_sim = cosine_similarity(wordvec, wordvec)
+
+        # 코사인유사도 행렬에서 input 상품의 인덱스 저장
+        mealkit_index = len(w2v_sim) - 1
+
+        # input 상품과 유사한 레시피 df 추출
+        sim_mealkit_df = rcp_crawler.wv_mealkit(w2v_sim, mealkit_index, 5, recipe_df)
+        # print(list(sim_mealkit_df.레시피일련번호))
+
+        i = list(sim_mealkit_df.레시피일련번호)
+        for idx in range(len(i)):
+            data = ckg.loc[ckg.레시피일련번호 == i[idx]]
+            data_id = str(data.레시피일련번호.values)
+            data_name = str(data.레시피제목.values)
+            data_description = data.요리소개.values
+            data_ingredient = str(data.요리재료_전처리.values)
+            data_allergy = str(data.알레르기.values)
+
+            rcp_crawler.add_new_recipes(data, data_id, data_name, data_description, data_ingredient, data_allergy)
+
+            pattern_punctuation = re.compile(r'[^\w\s]')
+            data_id_edited = pattern_punctuation.sub('', data_id)
+
+            # 레시피에만 있는 재료 추출
+            recipe_ingredients = rcp_crawler.get_recipe_only(ingredients_list, sim_mealkit_df)
+            # recipe_ingredients = list(filter(None, recipe_ingredients))  # input 구성정보와 요리재료가 모두 일치(빈리스트)하면 제외
+            data_filter_ingredient = ','.join(recipe_ingredients[idx])
+
+            man_list.append({'data_id': data_id,
+                            'data_name': str(data_name).replace("['",'').replace("']",''),
+                            'data_description': str(data_description).replace("['",'').replace("']",''),
+                            'data_ingredient': data_ingredient,
+                            'data_allergy': data_allergy,
+                            'data_link': 'https://www.10000recipe.com/recipe/'+data_id_edited,
+                            'data_filter_ingredient': data_filter_ingredient})
+
+    context = {'user_name': user_name, 'mealkit_detail_list': mealkit_detail_list, 'man_list': man_list}
+    return render(request, 'recipe.html', context)
 
