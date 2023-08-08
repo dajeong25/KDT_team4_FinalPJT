@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "mk_recs",
-    "rcp_recs",
     "user_datas",
 ]
 
