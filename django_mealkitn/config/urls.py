@@ -22,5 +22,4 @@ urlpatterns = [
     path('', views.home, name='home'),
     path("user_datas/", include('user_datas.urls')),
     path("mk_recs/", include('mk_recs.urls')),
-    # path("rcp_recs/", include('rcp_recs.urls')),
 ]
