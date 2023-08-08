@@ -27,8 +27,8 @@ django.setup()
 
 from mk_recs.models import CoupangMealkit
 
-records = CoupangMealkit.objects.all()
-records.delete()
+#records = CoupangMealkit.objects.all()
+#records.delete()
 
 nltk.download('punkt')
 
@@ -181,86 +181,88 @@ def deleteAllFiles(filePath):
         return 'Directory Not Found'
 
 def category_name(product):
-    if ('닭' in product) or ('백숙' in product):
-        name = '닭'
-    elif '구이' in product:
-        name = '구이'
-    elif ('전골' in product) or ('나베' in product) or ('스키야키' in product) or ('샤브샤브' in product):
-        name = '전골'
-    elif '족발' in product:
-        name = '족발'
-    elif '국수' in product:
-        name = '국수'
-    elif ('해물탕' in product) or ('연포탕' in product) or ('해신탕' in product) or ('꽃게탕' in product) or (
-            '해물 누룽지탕' in product) or ('조개탕' in product) or ('바지락탕' in product):
-        name = '해물탕'
-    elif ('해물뚝배기' in product) or ('문어오리탕' in product) or ('홍합탕' in product):
-        name = '해물탕'
-    elif ('매운탕' in product) or ('대구탕' in product) or ('동태탕' in product) or ('지리탕' in product) or ('맑은탕' in product) or (
-            '맑음탕' in product):
-        name = '생선탕'
-    elif ('알탕' in product) or ('알이 맛있탕' in product) or ('곤이탕' in product):
-        name = '알탕'
+    try:
+        if ('닭' in product) or ('백숙' in product):
+            name = '닭'
+        elif '구이' in product:
+            name = '구이'
+        elif ('전골' in product) or ('나베' in product) or ('스키야키' in product) or ('샤브샤브' in product):
+            name = '전골'
+        elif '족발' in product:
+            name = '족발'
+        elif '국수' in product:
+            name = '국수'
+        elif ('해물탕' in product) or ('연포탕' in product) or ('해신탕' in product) or ('꽃게탕' in product) or (
+                '해물 누룽지탕' in product) or ('조개탕' in product) or ('바지락탕' in product):
+            name = '해물탕'
+        elif ('해물뚝배기' in product) or ('문어오리탕' in product) or ('홍합탕' in product):
+            name = '해물탕'
+        elif ('매운탕' in product) or ('대구탕' in product) or ('동태탕' in product) or ('지리탕' in product) or ('맑은탕' in product) or (
+                '맑음탕' in product):
+            name = '생선탕'
+        elif ('알탕' in product) or ('알이 맛있탕' in product) or ('곤이탕' in product):
+            name = '알탕'
 
-    elif ('찌개' in product) or ('짜글이' in product) or ('짬뽕 순두부' in product):
-        name = '찌개/짜글이'
+        elif ('찌개' in product) or ('짜글이' in product) or ('짬뽕 순두부' in product):
+            name = '찌개/짜글이'
 
-    elif ('면' in product) or ('소바' in product) or ('짜장' in product) or ('누들' in product) or ('짬뽕' in product):
-        name = '면'
-    elif ('우동' in product) or ('라면' in product):
-        name = '면'
-    elif '스테이크' in product:
-        name = '스테이크'
+        elif ('면' in product) or ('소바' in product) or ('짜장' in product) or ('누들' in product) or ('짬뽕' in product):
+            name = '면'
+        elif ('우동' in product) or ('라면' in product):
+            name = '면'
+        elif '스테이크' in product:
+            name = '스테이크'
 
-    elif ('파스타' in product) or ('라자냐' in product):
-        name = '파스타'
+        elif ('파스타' in product) or ('라자냐' in product):
+            name = '파스타'
 
-    elif ('비빔밥' in product) or ('덮밥' in product):
-        name = '덮밥/비빔밥'
+        elif ('비빔밥' in product) or ('덮밥' in product):
+            name = '덮밥/비빔밥'
 
-    elif '리조또' in product:
-        name = '리조또'
+        elif '리조또' in product:
+            name = '리조또'
 
-    elif '마라탕' in product:
-        name = '마라탕'
-    elif '마파두부' in product:
-        name = '마파두부'
+        elif '마라탕' in product:
+            name = '마라탕'
+        elif '마파두부' in product:
+            name = '마파두부'
 
-    elif ('떡볶이' in product) or ('떡볶잉' in product):
-        name = '떡볶이'
+        elif ('떡볶이' in product) or ('떡볶잉' in product):
+            name = '떡볶이'
 
-    elif '무침' in product:
-        name = '무침'
-    elif '감바스' in product:
-        name = '감바스'
+        elif '무침' in product:
+            name = '무침'
+        elif '감바스' in product:
+            name = '감바스'
 
-    elif ('콩불' in product) or ('불고기' in product) or ('부침개' in product) or ('조림' in product):
-        name = '한식'
+        elif ('콩불' in product) or ('불고기' in product) or ('부침개' in product) or ('조림' in product):
+            name = '한식'
 
-    elif ('해물' in product) or ('씨푸드' in product) or ('씨키트' in product) or ('꽃게' in product) or ('새우' in product):
-        name = '씨푸드'
-    elif ('쉬림프' in product) or ('연어' in product) or ('조개' in product) or ('문어' in product):
-        name = '씨푸드'
+        elif ('해물' in product) or ('씨푸드' in product) or ('씨키트' in product) or ('꽃게' in product) or ('새우' in product):
+            name = '씨푸드'
+        elif ('쉬림프' in product) or ('연어' in product) or ('조개' in product) or ('문어' in product):
+            name = '씨푸드'
 
 
-    elif ('커리' in product) or ('카레' in product):
-        name = '카레'
+        elif ('커리' in product) or ('카레' in product):
+            name = '카레'
 
-    elif '샌드위치' in product:
-        name = '샌드위치'
-    elif ('볶음' in product) or ('잡채' in product) or ('순대볶음' in product):
-        name = '볶음'
+        elif '샌드위치' in product:
+            name = '샌드위치'
+        elif ('볶음' in product) or ('잡채' in product) or ('순대볶음' in product):
+            name = '볶음'
 
-    elif '쌈' in product:
-        name = '쌈'
-    elif ('국' in product) or ('육개장' in product) or ('파개장' in product) or ('수제비' in product) or ('칼제비' in product) or (
-            '순대국밥' in product):
-        name = '국'
-    elif '찜' in product:
-        name = '찜'
-    else:
+        elif '쌈' in product:
+            name = '쌈'
+        elif ('국' in product) or ('육개장' in product) or ('파개장' in product) or ('수제비' in product) or ('칼제비' in product) or (
+                '순대국밥' in product):
+            name = '국'
+        elif '찜' in product:
+            name = '찜'
+        else:
+            name = '기타'
+    except:
         name = '기타'
-
     return name
 
 def allergy(dataframe, column, column2):
@@ -361,7 +363,7 @@ def add_new_items(dataframe):
     '''
     for i in range(len(dataframe)):
         item = dataframe.loc[i]
-        print("new item added!! : " + item['상품'])
+        # print("new item added!! : " + item['상품'])
 
         CoupangMealkit(category_name=item['카테고리명'],
                   category_second=item['상세카테고리'],
@@ -464,7 +466,7 @@ def cv_commend_system(category, product_list, coupang):
                 if sim_scores[0][1] <= 0.01:
                     continue
                 extracted_productid.append(exproduct)
-                print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[0][1])
+                #print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[0][1])
 
             else:
                 exproduct = productid[sim_scores[1][0]]
@@ -472,7 +474,7 @@ def cv_commend_system(category, product_list, coupang):
                     if sim_scores[1][1] <= 0.01:
                         continue
                     extracted_productid.append(exproduct)
-                    print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[1][1])
+                    #print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[1][1])
 
                 else:
                     exproduct = productid[sim_scores[2][0]]
@@ -480,7 +482,7 @@ def cv_commend_system(category, product_list, coupang):
                         if sim_scores[2][1] <= 0.01:
                             continue
                         extracted_productid.append(exproduct)
-                        print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[2][1])
+                        #print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[2][1])
 
                     else:
                         exproduct = productid[sim_scores[3][0]]
@@ -488,7 +490,7 @@ def cv_commend_system(category, product_list, coupang):
                             if sim_scores[3][1] <= 0.01:
                                 continue
                             extracted_productid.append(exproduct)
-                            print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[3][1])
+                            #print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[3][1])
 
                         else:
                             exproduct = productid[sim_scores[4][0]]
@@ -496,7 +498,7 @@ def cv_commend_system(category, product_list, coupang):
                                 if sim_scores[4][1] <= 0.01:
                                     continue
                                 extracted_productid.append(exproduct)
-                                print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[4][1])
+                                #print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[4][1])
 
         if len(extracted_productid) != 5:
             raise Exception()
@@ -514,7 +516,7 @@ def cv_commend_system(category, product_list, coupang):
                         pass
                     else:
                         extracted_productid.append(exproduct)
-                        print(exproduct)
+                        #print(exproduct)
                         if len(extracted_productid) == 5:
                             break
 
@@ -525,7 +527,7 @@ def cv_commend_system(category, product_list, coupang):
                         pass
                     else:
                         extracted_productid.append(exproduct)
-                        print(exproduct)
+                        #print(exproduct)
                         if len(extracted_productid) == 5:
                             break
 
@@ -536,7 +538,7 @@ def cv_commend_system(category, product_list, coupang):
                         pass
                     else:
                         extracted_productid.append(exproduct)
-                        print(exproduct)
+                        #print(exproduct)
                         if len(extracted_productid) == 5:
                             break
 
@@ -547,7 +549,7 @@ def cv_commend_system(category, product_list, coupang):
                         pass
                     else:
                         extracted_productid.append(exproduct)
-                        print(exproduct)
+                        #print(exproduct)
                         if len(extracted_productid) == 5:
                             break
 
@@ -555,7 +557,7 @@ def cv_commend_system(category, product_list, coupang):
                 for number in range(5):
                     exproduct = coupang_sorted.iloc[number].상품
                     extracted_productid.append(exproduct)
-                    print(exproduct)
+                    #print(exproduct)
 
 
         except:
@@ -594,7 +596,7 @@ def tfidf_commend_system(category, product_list, coupang):
                 if sim_scores[0][1] <= 0.01:
                     continue
                 extracted_productid.append(exproduct)
-                print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[0][1])
+                #print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[0][1])
 
             else:
                 exproduct = productid[sim_scores[1][0]]
@@ -602,7 +604,7 @@ def tfidf_commend_system(category, product_list, coupang):
                     if sim_scores[1][1] <= 0.01:
                         continue
                     extracted_productid.append(exproduct)
-                    print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[1][1])
+                    #print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[1][1])
 
                 else:
                     exproduct = productid[sim_scores[2][0]]
@@ -610,7 +612,7 @@ def tfidf_commend_system(category, product_list, coupang):
                         if sim_scores[2][1] <= 0.01:
                             continue
                         extracted_productid.append(exproduct)
-                        print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[2][1])
+                        #print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[2][1])
 
                     else:
                         exproduct = productid[sim_scores[3][0]]
@@ -618,7 +620,7 @@ def tfidf_commend_system(category, product_list, coupang):
                             if sim_scores[3][1] <= 0.01:
                                 continue
                             extracted_productid.append(exproduct)
-                            print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[3][1])
+                            #print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[3][1])
 
                         else:
                             exproduct = productid[sim_scores[4][0]]
@@ -626,7 +628,7 @@ def tfidf_commend_system(category, product_list, coupang):
                                 if sim_scores[4][1] <= 0.01:
                                     continue
                                 extracted_productid.append(exproduct)
-                                print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[4][1])
+                                #print('현재 트렌드 -', docs[-1], '과 유사한 상품은', exproduct, sim_scores[4][1])
 
         if len(extracted_productid) != 5:
             raise Exception()
@@ -643,7 +645,7 @@ def tfidf_commend_system(category, product_list, coupang):
                         pass
                     else:
                         extracted_productid.append(exproduct)
-                        print(exproduct)
+                        #print(exproduct)
                         if len(extracted_productid) == 5:
                             break
 
@@ -654,7 +656,7 @@ def tfidf_commend_system(category, product_list, coupang):
                         pass
                     else:
                         extracted_productid.append(exproduct)
-                        print(exproduct)
+                        #print(exproduct)
                         if len(extracted_productid) == 5:
                             break
 
@@ -665,7 +667,7 @@ def tfidf_commend_system(category, product_list, coupang):
                         pass
                     else:
                         extracted_productid.append(exproduct)
-                        print(exproduct)
+                        #print(exproduct)
                         if len(extracted_productid) == 5:
                             break
 
@@ -676,7 +678,7 @@ def tfidf_commend_system(category, product_list, coupang):
                         pass
                     else:
                         extracted_productid.append(exproduct)
-                        print(exproduct)
+                        #print(exproduct)
                         if len(extracted_productid) == 5:
                             break
 
@@ -684,9 +686,8 @@ def tfidf_commend_system(category, product_list, coupang):
                 for number in range(5):
                     exproduct = coupang_sorted.iloc[number].상품
                     extracted_productid.append(exproduct)
-                    print(exproduct)
+                    #print(exproduct)
         except:
             pass
 
     return extracted_productid
-
